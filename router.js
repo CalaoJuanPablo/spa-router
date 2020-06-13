@@ -4,7 +4,15 @@ class Router {
 		this._loadInitialRoutes()
 	}
 
-	loadRoute() {}
+	loadRoute(...urlSegs) {
+		const matchedRoute = this._matchUrlToRoute(urlSegs)
+
+		const url = `/${urlSegs.join('/')}`
+		history.pushState({}, 'This works!!', url)
+
+		const routerOutElement = document.querySelector('[data-router]')
+		routerOutElement.innerHTML = matchedRoute.template
+	}
 
 	_matchUrlToRoute(urlSegs) {
 		const matchedRoute = this.routes.find((route) => {
@@ -24,7 +32,7 @@ class Router {
 
 	_loadInitialRoutes() {
 		const pathNameSplit = window.location.pathname.split('/')
-		const pathSegs = pathNameSplit.length > 1 ? pathNameSplit(1) : ''
+		const pathSegs = pathNameSplit.length > 1 ? pathNameSplit.slice(1) : ''
 
 		this.loadRoute(...pathSegs)
 	}
